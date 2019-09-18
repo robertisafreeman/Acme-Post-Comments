@@ -32,21 +32,14 @@ nav {
       };
 
       const Posts = ({ posts, tags, match })=> {
-        console.log(posts)
+      
         return (
           <ul>
-            { posts.map(post => <li key={ post.id }>
-              <Link to={`/posts/${post.id}`}>{ post.topic }</Link>
-              {
-                match.params.id === post.id && (
-                  <ul>
-                    { tags.filter(tag => tag.post_id === post.id).map( tag => <li key={tag.id}>{ tag.text }</li>)}
-                  </ul>
-                )
-              }
-            </li>) }
+            {
+              <li><Link to="Whatever">Pizza</Link></li>
+            }
           </ul>
-        );
+        )
       };
 
       const Home = ()=> <div>Enjoy the Posts!</div>
@@ -66,7 +59,6 @@ nav {
         }
         render(){
           const { posts, tags } = this.state;
-          console.log(posts)
           return (
             <HashRouter>
               <h1>Acme Posts and Tags!</h1>

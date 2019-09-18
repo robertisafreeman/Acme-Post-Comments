@@ -7,18 +7,18 @@ const path = require('path');
 app.get('/', (req, res, next)=> res.sendFile(path.join(__dirname, 'index.html')));
 
 
-app.get('/api/posts', (req, res, next)=> {
+app.get('/api/posts', async (req, res, next)=> {
   try {
-    res.send( await(db.findAllPosts()));
+    res.send( await db.findAllPosts());
   }
   catch(ex) {
     next(ex);
   }
 });
 
-app.get('/api/tags', (req, res, next)=> {
+app.get('/api/tags', async (req, res, next)=> {
   try{
-    res.send( await(db.findAllTags()));
+    res.send( await db.findAllTags());
   }
   catch(ex){
     next(ex);

@@ -2,36 +2,50 @@ const pg = require('pg');
 const uuid = require('uuid');
 
 const { Client } = pg;
-const client = new Client('postgres://localhost/donuts');
+const client = new Client('postgres://localhost/posts');
 client.connect();
 
 const nodeId = uuid.v4();
 const javaId = uuid.v4();
 const cId = uuid.v4();
+const tagId = uuid.v4();
 
 const SQL = `
     DROP TABLE IF EXISTS posts;
+    DROP TABLE IF EXISTS tags;
 
     CREATE TABLE posts(
         id UUID PRIMARY KEY, 
-        name VARCHAR(255)
+        name VARCHAR(255) UNIQUE NOT NULL
     );
-    INSERT INTO posts(id, name) values('${nodeId}', 'Node');
-    INSERT INTO posts(id, name) values('${javaId}', 'Java');
-    INSERT INTO posts(id, name) values('${cId}', 'C#');   
+    CREATE TABLE tags(
+        id UUID PRIMARY KEY,
+        name VARCHAR(255) UNIQUE NOT NULL
+    );
+
+    INSERT INTO posts(id, name) VALUES('${nodeId}', 'Node');
+    INSERT INTO posts(id, name) VALUES('${javaId}', 'Java');
+    INSERT INTO posts(id, name) VALUES('${cId}', 'C#');   
+
+    INSERT INTO tags(id, name) VALUES('${tagId}', 'Tag')
 `;
 
 const syncAndSeed = async ()=>{
-    return client.query(SQL);
+    await client.query(SQL);
+    console.log('success');
 };
 
-const findAllPosts = ()=>{
-    return client.query('SELECT * FROM posts')
-        .then( response => response.rows);
-    
+const findAllPosts = async ()=>{
+    const response = await client.query('SELECT * FROM posts');
+    return response;
+};
+const findAllTags = async ()=>{
+    const response = await client.query('SELECT * FROM tags');
+    return response;
 }
 //  syncAndSeed()
 module.exports = {
     syncAndSeed, 
-    findAllPosts
+    findAllPosts,
+    findAllTags
 }
